@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".HomePrincipalActivity"
+    >
+
+    <ImageView
+        android:id="@+id/logouniverse"
+        android:layout_width="wrap_content"
+        android:layout_height="277dp"
+        android:layout_gravity="center"
+        android:height="50dp"
+        android:translationY="10dp"
+        app:srcCompat="@drawable/logounverse"
+
+        />
+
+    <TextView
+        android:id="@+id/txtLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Biebenido a UNverse, el universo de la UN"
+        android:textSize="20sp"
+        android:translationY="10dp"
+        android:height="50dp"
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"
+        android:background="@null"
+        android:translationX="-90dp"
+        app:srcCompat="@drawable/botonsalida" />
+
+    <TextView
+        android:id="@+id/txtcerrarsesion"
+        android:layout_width="210dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:text="Cerrar Sesion"
+        android:textColor="@null"
+        android:textSize="25sp"
+        android:translationX="50dp"
+        android:translationY="-50dp"
+        android:onClick="onClick"
+        />
+</LinearLayout>

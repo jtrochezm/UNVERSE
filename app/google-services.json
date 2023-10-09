@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "849692079526",
+    "project_id": "unverse-69b4d",
+    "storage_bucket": "unverse-69b4d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849692079526:android:91bda28723067b3bd84b67",
+        "android_client_info": {
+          "package_name": "com.example.unverse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzycy-WDjA8Sf64jGT3-SqXnaJ6dGEiAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

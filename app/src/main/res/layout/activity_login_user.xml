@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:visibility="visible"
+    tools:context=".LoginUserActivity">
+
+    <ImageView
+        android:id="@+id/logouniverse"
+        android:layout_width="wrap_content"
+        android:layout_height="277dp"
+        android:layout_gravity="center"
+        android:height="50dp"
+        android:translationY="10dp"
+        app:srcCompat="@drawable/logounverse"
+
+        />
+
+    <TextView
+        android:id="@+id/txtLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="Inicio de sesion"
+        android:textSize="20sp"
+        android:translationY="10dp"
+        android:height="50dp"
+        />
+
+    <EditText
+        android:id="@+id/TxtContrasena"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="contraseña"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:translationY="70dp"
+        android:minHeight="50dp"
+        android:autofillHints="50dp"
+        />
+
+    <Button
+        android:id="@+id/buttonIngresar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="ingresar"
+        android:translationY="80dp"
+        />
+
+
+    <TextView
+        android:id="@+id/resgist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="No tienes cuenta? Registrate"
+        android:translationY="100dp"
+        android:textSize="15sp"
+        android:height="50dp"
+        android:onClick="irRegistro"
+        />
+
+    <EditText
+        android:id="@+id/TexEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:hint="correo"
+        android:translationY="-120dp"
+        android:minHeight="50dp"
+        android:autofillHints="50dp" />
+</LinearLayout>

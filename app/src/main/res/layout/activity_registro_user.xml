@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegistroUserActivity">
+    <ImageView
+        android:id="@+id/logoun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/logounverse"/> <!-- Aqui se cambia el logo de la app -->
+
+    <EditText
+        android:id="@+id/TextnombreReg"
+        android:layout_width="181dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="nombres"
+        android:inputType="textPersonName"
+        android:minHeight="50dp"
+        android:translationX="-110dp"
+        android:translationY="20dp" />
+
+    <EditText
+        android:id="@+id/TxtapellidosReg"
+        android:layout_width="194dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="apellidos"
+        android:inputType="textPersonName"
+        android:minHeight="50dp"
+        android:translationX="100dp"
+        android:translationY="-25dp" />
+
+    <EditText
+        android:id="@+id/editTextCorreoReg"
+        android:layout_width="394dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="correo electronico"
+        android:inputType="textEmailAddress"
+        android:translationY="-10dp"
+        android:minHeight="50dp"
+        />
+
+    <EditText
+        android:id="@+id/TextContraseñaReg"
+        android:layout_width="396dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="contraseña"
+        android:inputType="textPassword"
+        android:translationY="1dp"
+        android:minHeight="50dp"
+        />
+
+    <EditText
+        android:id="@+id/TextContrasena2Reg"
+        android:layout_width="396dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="confirmar contraseña"
+        android:inputType="textPassword"
+        android:translationY="15dp"
+        android:minHeight="50dp"
+        />
+
+    <Button
+        android:id="@+id/buttonregistrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="registrarse"
+        android:translationY="20dp" />
+
+    <TextView
+        android:id="@+id/txtreslog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="¿ya tienes cuenta? inicia sesion"
+        android:translationY="30dp"
+        android:minHeight="50dp"
+        android:textColor="#276E67"
+        android:textSize="18sp"
+        android:onClick="onClick"
+
+        />
+</LinearLayout>
