@@ -1,0 +1,779 @@
+
+/**
+ *
+ * @author David Morales
+ */
+
+/*
+estrctura de datos: pila
+*/
+
+
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+
+public class PilaComparativa {
+
+    public static void main(String[] args) {
+        int[] tamanosDatos = {10000, 100000, 1000000, 10000000, 100000000};
+
+        for (int tamano : tamanosDatos) {
+            System.out.println("Tamaño de Datos: " + tamano);
+
+            // Generar datos y almacenar en un archivo si no existe
+            String archivoDatos = "datos_" + tamano + ".txt";
+            if (!Files.exists(Paths.get(archivoDatos))) {
+                generarDatos(archivoDatos, tamano);
+            }
+
+            // Crear una pila
+            Pila pila = new Pila();
+
+            // Medición de tiempos para la creación de datos
+            medirTiempo("Carga de Datos en Pila", () -> cargarDatosEnPila(pila, archivoDatos, Charset.forName("ISO-8859-1")));
+
+            // Medición de tiempos para otras operaciones
+            medirTiempo("Pop de Datos", () -> vaciarPila(pila));
+
+            System.out.println();
+        }
+    }
+
+    private static void generarDatos(String archivo, int tamano) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
+            Random rand = new Random();
+            for (int i = 0; i < tamano; i++) {
+                // Generar fecha aleatoria
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String fecha = dateFormat.format(new Date());
+
+                // Generar descripción aleatoria
+                String descripcion = generarDescripcionAleatoria();
+
+                // Usar StringBuilder para mejorar el rendimiento de la concatenación
+                StringBuilder linea = new StringBuilder();
+                linea.append(fecha).append(" ").append(descripcion);
+
+                // Escribir en el archivo
+                writer.write(linea.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String generarDescripcionAleatoria() {
+        // Lista de posibles descripciones
+        String[] descripciones = {"Hacer ejercicio", "Reunión de trabajo", "Estudiar", "Comer", "Descansar", "Programar"};
+
+        // Elegir aleatoriamente una descripción
+        Random rand = new Random();
+        return descripciones[rand.nextInt(descripciones.length)];
+    }
+
+    private static void cargarDatosEnPila(Pila pila, String archivo, Charset charset) {
+        try {
+            // Leer datos del archivo y cargar en la pila
+            Files.lines(Paths.get(archivo), charset)
+                    .map(linea -> {
+                        String[] partes = linea.split("\\s+", 2);
+                        String fecha = partes[0];
+                        String descripcion = partes[1];
+                        return new Datos(fecha, descripcion);
+                    })
+                    .forEach(pila::push);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void vaciarPila(Pila pila) {
+        while (!pila.isEmpty()) {
+            pila.pop();
+        }
+    }
+
+    private static void medirTiempo(String operacion, Runnable runnable) {
+        long tiempoInicio = System.currentTimeMillis();
+        runnable.run();
+        long tiempoFin = System.currentTimeMillis();
+        System.out.println(operacion + ": " + (tiempoFin - tiempoInicio) + " ms");
+    }
+}
+
+class Datos {
+    private String fecha;
+    private String descripcion;
+
+    public Datos(String fecha, String descripcion) {
+        this.fecha = fecha;
+        this.descripcion = descripcion;
+    }
+
+    // Getter y Setter
+
+    @Override
+    public String toString() {
+        return "Datos{" +
+                "fecha='" + fecha + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
+    }
+}
+
+class Pila {
+    private Datos[] datos;
+    private int tamano;
+    private int tope;
+
+    public Pila() {
+        tamano = 10; // Tamaño inicial de la pila (puedes ajustarlo según tus necesidades)
+        datos = new Datos[tamano];
+        tope = -1;
+    }
+
+    public void push(Datos elemento) {
+        if (tope == tamano - 1) {
+            // Duplicar el tamaño de la pila si está llena
+            tamano *= 2;
+            Datos[] nuevaPila = new Datos[tamano];
+            System.arraycopy(datos, 0, nuevaPila, 0, datos.length);
+            datos = nuevaPila;
+        }
+        datos[++tope] = elemento;
+    }
+
+    public Datos pop() {
+        if (isEmpty()) {
+            throw new IllegalStateException("La pila está vacía");
+        }
+        return datos[tope--];
+    }
+
+    public boolean isEmpty() {
+        return tope == -1;
+    }
+}
+
+/*----------------------------------------------------------------------------------------*/
+
+/*
+
+estructura de datos: cola
+
+*/
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
+
+
+class MyCalendar  {
+        private StringQueueWrapper[] days;
+
+        public MyCalendar (int numberOfDays) {
+            if (numberOfDays > 0) {
+                days = new StringQueueWrapper[numberOfDays];
+
+                for (int i = 0; i < numberOfDays; i++) {
+                    days[i] = new StringQueueWrapper();
+                }
+            } else {
+                System.out.println("Error.");
+            }
+        }
+        public void newTask(String data, int day) {
+            if (day >= 1 && day <= days.length) {
+                days[day - 1].insert(data);
+            } else {
+                System.out.println("Error.");
+            }
+        }
+        public void newTaskWithIndex(String data, int day, int index) {
+            if (day >= 1 && day <= days.length) {
+                days[day - 1].insertWithIndex(data, index);
+            } else {
+                System.out.println("Error.");
+            }
+        }
+        public void updateTask(int day, int index, String newData) {
+            if (day >= 1 && day <= days.length) {
+                days[day - 1].update(newData, index);
+            } else {
+                System.out.println("Error.");
+            }
+        }
+
+        public void deleteTask(int day, int index) {
+            if (day >= 1 && day <= days.length) {
+                days[day - 1].delete();
+            } else {
+                System.out.println("Eraror.");
+            }
+        }
+
+        public void getTasksForDay(int day) {
+            if (day >= 1 && day <= days.length) {
+                System.out.println("Tâches pour le jour " + day + ": " + days[day - 1].toString());
+            } else {
+                System.out.println("Error.");
+            }
+        }
+
+        public void showCalendar() {
+            for (int i = 0; i < days.length; i++) {
+                System.out.println("Jour " + (i + 1) + ": " + days[i].toString());
+            }
+        }
+
+        public void createShowDay() {
+            Scanner scanner = new Scanner(System.in);
+
+            System.out.print("Day ? : ");
+            int dayToShow = scanner.nextInt();
+
+            if (dayToShow >= 1 && dayToShow <= days.length) {
+                System.out.println("Tasks " + dayToShow + ": " + days[dayToShow - 1].toString());
+            } else {
+                System.out.println("Error.");
+            }
+            scanner.close();
+        }
+
+        public void showDay(int day) {
+            if (day >= 1 && day <= days.length) {
+                System.out.println("Tasks : " + day + ": " + days[day - 1].toString());
+            } else {
+                System.out.println("Error.");
+            }
+        }
+
+        public static void main(String[] args) {
+            MyCalendar  myCalendar = new MyCalendar (30);
+            String archivoDias = "100kN.txt";
+            String archivoTareas = "100kW.txt";
+            int i = 0;
+            int max = 100000;
+            try (Scanner scannerDias = new Scanner(new File(archivoDias))) {
+                try (Scanner scannerTareas = new Scanner(new File(archivoTareas))) {
+                    while (scannerDias.hasNextLine() && scannerTareas.hasNextLine() && i != max) {
+                        String diaStr = scannerDias.nextLine();
+                        String tarea = scannerTareas.nextLine();
+                        if (!diaStr.isEmpty() && !tarea.isEmpty()) {
+                            int dia = Integer.parseInt(diaStr);
+                            myCalendar.newTask(tarea, dia);
+                        }
+                        i += 1;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        i = 0;
+        long startTime = System.currentTimeMillis();
+        try (Scanner scannerDias = new Scanner(new File(archivoDias))) {
+            try (Scanner scannerTareas = new Scanner(new File(archivoTareas))) {
+                while (scannerDias.hasNextLine() && scannerTareas.hasNextLine() && i != max) {
+                    String diaStr = scannerDias.nextLine();
+                    String tarea = scannerTareas.nextLine();
+                    if (!diaStr.isEmpty() && !tarea.isEmpty()) {
+                        int dia = Integer.parseInt(diaStr);
+                        myCalendar.deleteTask(dia, 0);
+                    }
+                    i += 1;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Eso tomó " + (endTime - startTime) + " milisegundos");
+        }
+
+    public class StringQueueWrapper {
+        private Queue<String> queue;
+
+        public StringQueueWrapper() {
+            this.queue = new LinkedList<>();
+        }
+
+        public boolean isEmpty() {
+            return queue.isEmpty();
+        }
+
+        public void insert(String data) {
+            queue.add(data);
+    
+        }
+
+        public void insertWithIndex(String data, int index) {
+            System.out.println("Error.");
+        }
+
+        public void update(String data, int index) {
+            System.out.println("Error");
+        }
+
+        public String delete() {
+             return queue.remove();
+        }
+    }   
+}
+
+
+/*-------------------------------------------------------------------------------------------------*/
+
+
+/*
+
+estructura de datos: lista enlazada
+
+*/
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+class Calendar {
+    Scanner scanner = new Scanner(System.in);
+    HashLinkedList[] list;
+    int numberOfDays;
+
+    public Calendar(int days) {
+        list = new HashLinkedList[days + 1];
+        this.numberOfDays = days + 1;
+    }
+
+    public void newTask(String data, int day) {
+        if (list[day] == null) {
+            list[day] = new HashLinkedList();
+        }
+        if (list[day].insert(data)) {
+            System.out.println("Actividad insertada.");
+        } else {
+            System.out.println("Actividad no insertada.");
+        }
+        ;
+    }
+
+    public void newTaskIWithndex(String data, int day, int index) {
+        if (list[day] == null) {
+            list[day] = new HashLinkedList();
+        }
+        if (list[day].insertWithIndex(data, index)) {
+            System.out.println("Actividad insertada.");
+        } else {
+            System.out.println("Actividad no insertada.");
+        }
+        ;
+    }
+
+    public void updateTask(int day, int index) {
+        if (list[day] != null) {
+            System.out.println("Ingrese la nueva descripcion de la actividad: ");
+            String data = scanner.nextLine();
+            list[day].update(data, index);
+        } else {
+            System.out.println("El dia " + day + " no tiene tareas.");
+        }
+    }
+
+    public void deleteTask(int day, int index) {
+        if (list[day] != null) {
+            if (list[day].delete(index)) {
+                System.out.println("Actividad eliminada.");
+            } else {
+                System.out.println("Actividad no eliminada.");
+            }
+            ;
+            if (list[day].isEmpty()) {
+                list[day] = null;
+            }
+        } else {
+            System.out.println("El dia " + day + " no tiene tareas.");
+        }
+    }
+
+    public void searchTask(int day, int index) {
+        if (list[day] != null) {
+            list[day].search(day, index);
+        } else {
+            System.out.println("El dia " + day + " no tiene tareas.");
+        }
+    }
+
+    public void showCalendar() {
+        for (int i = 1; i < numberOfDays; i++) {
+            if (list[i] != null) {
+                list[i].printRecursive(i);
+            } else {
+                System.out.println("El dia " + i + " no tiene tareas.");
+            }
+        }
+    }
+
+    public void createShowDay() {
+        System.out.println("Ingrese el día que quiere ver: ");
+        int day = scanner.nextInt();
+        scanner.nextLine();
+        showDay(day);
+    }
+
+    public void showDay(int day) {
+        if (list[day] != null) {
+            list[day].printRecursive(day);
+        } else {
+            System.out.println("El dia " + day + " no tiene tareas.");
+        }
+    }
+
+    public void exportCalendar() {
+        System.out.println("Ingrese el nombre del archivo de exportación: ");
+        String archivo = scanner.nextLine();
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(archivo))) {
+            for (int i = 0; i < numberOfDays; i++) {
+                if (list[i] != null) {
+                    writer.println(list[i].recursiveExport(i));
+                } else {
+                    writer.println("El dia " + i + " no tiene tareas.");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createNewTask() {
+        int option;
+        int index;
+        System.out.println("Ingrese el día de la actividad: ");
+        int day = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Ingrese la descripcion de la actividad: ");
+        String data = scanner.nextLine();
+        System.out.println("\n1. Insertar la tarea al final de la lista");
+        System.out.println("2. Insertar la tarea despues de un index de la lista");
+        System.out.print("Ingrese su opción: ");
+        option = scanner.nextInt();
+
+        switch (option) {
+            case 1:
+                newTask(data, day);
+                break;
+            case 2:
+                System.out.println(
+                        "Ingrese el index anterior a la actividad a insertar (para poner la actividad en el primer index digite 0): ");
+                index = scanner.nextInt();
+                newTaskIWithndex(data, day, index);
+                break;
+            default:
+                System.out.println("Opción no válida. Actividad no insertada.");
+        }
+    }
+
+    public void createUpdateTask() {
+        System.out.println("Ingrese el día de la actividad: ");
+        int day = scanner.nextInt();
+        System.out.println("Ingrese el indice de la actividad: ");
+        int index = scanner.nextInt();
+        scanner.nextLine();
+        updateTask(day, index);
+    }
+
+    public void createDeleteTask() {
+        System.out.println("Ingrese el día de la actividad: ");
+        int day = scanner.nextInt();
+        System.out.println("Ingrese el indice de la actividad: ");
+        int index = scanner.nextInt();
+        scanner.nextLine();
+        deleteTask(day, index);
+    }
+
+    public void createSearchTask() {
+        System.out.println("Ingrese el día de la actividad: ");
+        int day = scanner.nextInt();
+        System.out.println("Ingrese el indice de la actividad: ");
+        int index = scanner.nextInt();
+        scanner.nextLine();
+        searchTask(day, index);
+    }
+
+    public void showMenu() {
+        int option;
+        System.out.println("Menú:");
+        System.out.println("1. Nueva actividad");
+        System.out.println("2. Actualizar actividad");
+        System.out.println("3. Eliminar actividad");
+        System.out.println("4. Buscar actividad");
+        System.out.println("5. Mostrar día");
+        System.out.println("6. Mostrar calendario");
+        System.out.println("7. Exportar calendario");
+        System.out.println("8. Salir");
+        do {
+            System.out.print("Ingrese su opción: ");
+            option = scanner.nextInt();
+
+            switch (option) {
+                case 1:
+                    createNewTask();
+                    break;
+                case 2:
+                    createUpdateTask();
+                    break;
+                case 3:
+                    createDeleteTask();
+                    break;
+                case 4:
+                    createSearchTask();
+                    break;
+                case 5:
+                    createShowDay();
+                    break;
+                case 6:
+                    showCalendar();
+                    break;
+                case 7:
+                    exportCalendar();
+                    break;
+                case 8:
+                    break;
+                default:
+                    System.out.println("Opción no válida. Inténtelo de nuevo.");
+            }
+
+        } while (option != 8);
+
+    }
+
+    class HashLinkedList {
+        private Node head;
+
+        public HashLinkedList() {
+            head = null;
+        }
+
+        public boolean isEmpty() {
+            Node ptr;
+            ptr = head;
+            if (ptr == null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public boolean insert(String data) {
+            int index = 0;
+            boolean inserted;
+            Node ptr, prev;
+            inserted = false;
+            ptr = head;
+            prev = null;
+            while (ptr != null) {
+                prev = ptr;
+                ptr = ptr.getNext();
+            }
+            if (ptr == null) {
+                inserted = true;
+                if (prev == null) {
+                    index = 1;
+                } else {
+                    index = prev.getIndex() + 1;
+                }
+                Node newp = new Node(data, index);
+                newp.setData(data);
+                newp.setNext(ptr);
+                if (prev == null)
+                    head = newp;
+                else
+                    prev.setNext(newp);
+            }
+            return inserted;
+        }
+
+        public boolean insertWithIndex(String data, int index) {
+            boolean inserted = false;
+            Node ptr;
+            ptr = head;
+            if (index == 0) {
+                Node newNode = new Node(data, 1);
+                newNode.setNext(head);
+                head = newNode;
+                inserted = true;
+                Node current = newNode.getNext();
+                while (current != null) {
+                    current.setIndex(current.getIndex() + 1);
+                    current = current.getNext();
+                }
+            } else {
+                while (ptr != null && ptr.getIndex() != index) {
+                    ptr = ptr.getNext();
+                }
+
+                if (ptr != null) {
+                    Node newp = new Node(data, index + 1);
+                    newp.setNext(ptr.getNext());
+                    ptr.setNext(newp);
+                    inserted = true;
+
+                    Node current = newp.getNext();
+                    while (current != null) {
+                        current.setIndex(current.getIndex() + 1);
+                        current = current.getNext();
+                    }
+                }
+            }
+
+            return inserted;
+        }
+
+        public boolean update(String data, int index) {
+            boolean updated = false;
+            Node ptr;
+            ptr = head;
+            while (ptr != null && ptr.getIndex() != index) {
+                ptr = ptr.getNext();
+                System.out.println(ptr.getIndex());
+            }
+            if (ptr != null) {
+                ptr.setData(data);
+                updated = true;
+            }
+            return updated;
+        }
+
+        public boolean delete(int index) {
+            boolean deleted = false;
+            Node ptr, prev;
+            ptr = head;
+            prev = null;
+            while (ptr != null && ptr.getIndex() != index) {
+                prev = ptr;
+                ptr = ptr.getNext();
+            }
+            if (ptr != null) {
+                deleted = true;
+                if (prev == null)
+                    head = ptr.getNext();
+                else
+                    prev.setNext(ptr.getNext());
+            }
+            Node current = ptr.getNext();
+            while (current != null) {
+                current.setIndex(current.getIndex() - 1);
+                current = current.getNext();
+            }
+            return deleted;
+        }
+
+        public boolean search(int day, int index) {
+            boolean found = false;
+            Node ptr;
+            ptr = head;
+            while (ptr != null && ptr.getIndex() != index) {
+                ptr = ptr.getNext();
+            }
+            if (ptr != null) {
+                found = true;
+                System.out.println("\nActividad encontrada: ");
+                System.out.println("Dia " + day);
+                System.out.print("Index de la actividad: ");
+                System.out.println(ptr.getIndex());
+                System.out.print("Descripcion de la actividad: ");
+                System.out.println(ptr.getData());
+            }
+            return found;
+        }
+
+        public void printRecursive(int day) {
+            System.out.print("Dia " + day + ":");
+            printR(head);
+            System.out.println();
+        }
+
+        public String recursiveExport(int day) {
+            String dayExport = "El dia " + day + ":";
+            String dayTasks = recursiveExportAux(head);
+            if (!dayTasks.isEmpty()) {
+                dayExport += " " + dayTasks;
+            }
+            return dayExport;
+        }
+
+        private String recursiveExportAux(Node p) {
+            String dayTasks = "";
+            if (p != null) {
+                dayTasks += p.getIndex() + "." + p.getData();
+                if (p.getNext() != null) {
+                    dayTasks += "  ";
+                }
+                dayTasks += recursiveExportAux(p.getNext());
+            }
+            return dayTasks;
+        }
+
+        private void printR(Node p) {
+            if (p != null) {
+                System.out.print(" " + p.getIndex() + "." + p.getData() + " ");
+                printR(p.getNext());
+            }
+        }
+
+        class Node {
+            private String data;
+            private int index;
+            private Node next;
+
+            public Node(String data, int index) {
+                this.index = index;
+                this.data = data;
+                next = null;
+            }
+
+            public String getData() {
+                return data;
+            }
+
+            public void setData(String data) {
+                this.data = data;
+            }
+
+            public int getIndex() {
+                return index;
+            }
+
+            public void setIndex(int index) {
+                this.index = index;
+            }
+
+            public Node getNext() {
+                return next;
+            }
+
+            public void setNext(Node next) {
+                this.next = next;
+            }
+
+        }
+    }
+
+    public static void main(String[] args) {
+        Calendar enero = new Calendar(31);
+        enero.showMenu();
+    }
+
+}
